@@ -1,0 +1,40 @@
+services:
+  # Streamlit capstone UI -> http://localhost:8501
+  app:
+    build: .
+    image: study-buddy
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      # Talk to Ollama on the Docker host (Linux needs the host-gateway mapping below).
+      OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Live-edit notes (RAG corpus) and pricing without rebuilding.
+      - ./notes:/app/notes
+      - ./study_buddy/pricing.yaml:/app/study_buddy/pricing.yaml
+    restart: unless-stopped
+
+  # Jupyter for the learning notebooks -> http://localhost:8888
+  jupyter:
+    build: .
+    image: study-buddy
+    command: >
+      jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser
+      --allow-root --NotebookApp.token=''
+    ports:
+      - "8888:8888"
+    env_file:
+      - .env
+    environment:
+      OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Persist notebook edits back to the host.
+      - ./notebooks:/app/notebooks
+      - ./notes:/app/notes
+    restart: unless-stopped

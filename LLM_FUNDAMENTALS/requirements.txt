@@ -1,0 +1,17 @@
+# Core LLM providers
+ollama>=0.3.0
+openai>=1.40.0
+google-genai>=0.3.0
+
+# Config & data
+python-dotenv>=1.0.0
+PyYAML>=6.0
+numpy>=1.26.0
+tiktoken>=0.7.0
+
+# WebUI capstone
+streamlit>=1.36.0
+
+# Notebooks
+jupyter>=1.0.0
+ipykernel>=6.29.0

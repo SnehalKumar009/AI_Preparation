@@ -1,0 +1,19 @@
+# Secrets & env
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# RAG index cache
+study_buddy/.rag_cache/
+*.npy
+
+# OS
+.DS_Store

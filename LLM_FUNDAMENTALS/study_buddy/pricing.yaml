@@ -1,0 +1,40 @@
+# Pricing table — USD per 1,000,000 tokens.
+# EDIT these to match current provider rates (they change over time).
+# Local Ollama models are free: input/output = 0.
+#
+# Format:
+#   <model-name>:
+#     input:  <usd per 1M input tokens>
+#     output: <usd per 1M output tokens>
+
+# --- Local Ollama (free) ---
+"qwen3-coder:30b":
+  input: 0.0
+  output: 0.0
+"nomic-embed-text":
+  input: 0.0
+  output: 0.0
+
+# --- OpenAI ---
+"gpt-4o-mini":
+  input: 0.15
+  output: 0.60
+"text-embedding-3-small":
+  input: 0.02
+  output: 0.0
+
+# --- Google Gemini ---
+"gemini-2.0-flash":
+  input: 0.10
+  output: 0.40
+"text-embedding-004":
+  input: 0.0
+  output: 0.0
+
+# --- DeepSeek ---
+"deepseek-chat":
+  input: 0.27
+  output: 1.10
+"deepseek-reasoner":
+  input: 0.55
+  output: 2.19

@@ -1,0 +1,19 @@
+# Git & env
+.git
+.gitignore
+.env
+.venv
+venv
+
+# Python caches
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# RAG cache & artifacts
+study_buddy/.rag_cache/
+*.npy
+
+# Docs/dev
+README.md
+.vscode

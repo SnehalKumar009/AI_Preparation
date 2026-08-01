@@ -2,6 +2,7 @@
 ollama>=0.3.0
 openai>=1.40.0
 google-genai>=0.3.0
+anthropic>=0.34.0
 
 # Config & data
 python-dotenv>=1.0.0

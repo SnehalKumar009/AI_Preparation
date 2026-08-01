@@ -1,8 +1,8 @@
 # LLM Fundamentals — Study Buddy (Phase 1)
 
 A provider-agnostic LLM toolkit for learning the 15 Phase 1 fundamentals.
-Swap between local **Ollama** and cloud (**OpenAI / Gemini / DeepSeek**) with one
-line, track **real USD cost**, and build up to a RAG + tools chat app.
+Swap between local **Ollama** and cloud (**OpenAI / Gemini / DeepSeek / Anthropic**)
+with one line, track **real USD cost**, and build up to a RAG + tools chat app.
 
 ## Setup (Ubuntu)
 
@@ -61,7 +61,7 @@ a rebuild. To run only one service: `docker compose up app` or `... up jupyter`.
 
 ```
 study_buddy/        # shared core (imported by notebooks + webui)
-  providers/        # ollama, openai, gemini, deepseek behind one interface
+  providers/        # ollama, openai, gemini, deepseek, anthropic behind one interface
   pricing.yaml      # editable USD/1M-token rates
   cost.py rag.py tokens.py tools.py
 notebooks/          # 01..15 + capstone

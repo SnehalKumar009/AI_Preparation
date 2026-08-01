@@ -22,6 +22,7 @@ class Settings:
     openai_api_key: str | None = field(default_factory=lambda: os.getenv("OPENAI_API_KEY"))
     gemini_api_key: str | None = field(default_factory=lambda: os.getenv("GEMINI_API_KEY"))
     deepseek_api_key: str | None = field(default_factory=lambda: os.getenv("DEEPSEEK_API_KEY"))
+    anthropic_api_key: str | None = field(default_factory=lambda: os.getenv("ANTHROPIC_API_KEY"))
 
     # Default models per role (see plan)
     ollama_chat_model: str = "qwen3-coder:30b"
@@ -31,6 +32,7 @@ class Settings:
     gemini_chat_model: str = "gemini-2.0-flash"
     deepseek_chat_model: str = "deepseek-chat"
     deepseek_reasoner_model: str = "deepseek-reasoner"
+    anthropic_chat_model: str = "claude-3-5-haiku-latest"
 
     # Filesystem
     notes_dir: Path = PROJECT_ROOT / "notes"

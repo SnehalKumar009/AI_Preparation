@@ -16,6 +16,7 @@ _REGISTRY = {
     "openai": ("study_buddy.providers.openai_provider", "OpenAIProvider"),
     "deepseek": ("study_buddy.providers.openai_provider", "DeepSeekProvider"),
     "gemini": ("study_buddy.providers.gemini_provider", "GeminiProvider"),
+    "anthropic": ("study_buddy.providers.anthropic_provider", "AnthropicProvider"),
 }
 
 

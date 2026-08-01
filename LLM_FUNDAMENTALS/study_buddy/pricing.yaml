@@ -39,10 +39,39 @@
   input: 0.55
   output: 2.19
 
-# --- Anthropic ---
-"claude-3-5-haiku-latest":
-  input: 0.80
-  output: 4.00
-"claude-3-5-sonnet-latest":
+# --- Anthropic (Claude) ---
+# POC placeholders by tier (haiku < sonnet/fable < opus).
+# EDIT with your account's real rates.
+"claude-haiku-4-5-20251001":
+  input: 1.00
+  output: 5.00
+"claude-sonnet-5":
   input: 3.00
   output: 15.00
+"claude-sonnet-4-6":
+  input: 3.00
+  output: 15.00
+"claude-sonnet-4-5-20250929":
+  input: 3.00
+  output: 15.00
+"claude-fable-5":
+  input: 3.00
+  output: 15.00
+"claude-opus-5":
+  input: 15.00
+  output: 75.00
+"claude-opus-4-8":
+  input: 15.00
+  output: 75.00
+"claude-opus-4-7":
+  input: 15.00
+  output: 75.00
+"claude-opus-4-6":
+  input: 15.00
+  output: 75.00
+"claude-opus-4-5-20251101":
+  input: 15.00
+  output: 75.00
+"claude-opus-4-1-20250805":
+  input: 15.00
+  output: 75.00

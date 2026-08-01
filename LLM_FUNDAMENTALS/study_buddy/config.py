@@ -32,7 +32,7 @@ class Settings:
     gemini_chat_model: str = "gemini-2.0-flash"
     deepseek_chat_model: str = "deepseek-chat"
     deepseek_reasoner_model: str = "deepseek-reasoner"
-    anthropic_chat_model: str = "claude-3-5-haiku-latest"
+    anthropic_chat_model: str = "claude-haiku-4-5-20251001"
 
     # Filesystem
     notes_dir: Path = PROJECT_ROOT / "notes"

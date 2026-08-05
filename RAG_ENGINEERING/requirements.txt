@@ -1,0 +1,32 @@
+# Phase 2 — RAG Engineering. Superset of Phase 1 so one .venv runs both.
+# Install:  pip install -r RAG_ENGINEERING/requirements.txt
+
+# ---- Providers (reused from Phase 1 study_buddy) ----
+ollama>=0.3.0
+openai>=1.40.0            # also used for DeepSeek (OpenAI-compatible)
+google-genai>=0.3.0
+anthropic>=0.34.0
+
+# ---- Config & core ----
+python-dotenv>=1.0.0
+PyYAML>=6.0
+numpy>=1.26.0
+tiktoken>=0.7.0
+
+# ---- Phase 2 RAG stack (introduced progressively across notebooks) ----
+chromadb>=0.5.0          # 08 Vector Databases (persistence + metadata filters)
+rank-bm25>=0.2.2         # 09 Keyword Search / 10 Hybrid
+networkx>=3.2            # 16 Graph RAG
+pypdf>=4.2.0             # 18 Document Ingestion (PDF)
+hnswlib>=0.8.0           # 24 ANN Indexing Internals
+
+# Optional / heavier — uncomment if you want a local cross-encoder reranker (11)
+# sentence-transformers>=3.0.0
+
+# Optional — third-party RAG eval (21). We implement LLM-as-judge by hand by default.
+# ragas>=0.1.0
+
+# ---- Notebooks + capstone ----
+jupyter>=1.0.0
+ipykernel>=6.29.0
+streamlit>=1.36.0

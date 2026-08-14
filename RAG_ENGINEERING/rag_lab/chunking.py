@@ -111,3 +111,32 @@ def recursive_chunks(
     if tail:
         chunks.append(Chunk(tail, source, len(chunks)))
     return chunks
+
+
+def parent_child_chunks(
+    text: str,
+    source: str = "inline",
+    parent_size: int = 200,
+    child_size: int = 60,
+    overlap: int = 10,
+) -> tuple[list[Chunk], list[Chunk]]:
+    """Split into large parents, then each parent into small children (notebook 13).
+
+    Children carry ``meta['parent_index']`` so a retriever can match on the precise
+    child but return the richer parent passage.
+    """
+    parents = fixed_chunks(text, source=source, chunk_size=parent_size, overlap=0)
+    children: list[Chunk] = []
+    for parent in parents:
+        for child in fixed_chunks(
+            parent.text, source=source, chunk_size=child_size, overlap=overlap
+        ):
+            children.append(
+                Chunk(
+                    text=child.text,
+                    source=source,
+                    index=len(children),
+                    meta={"parent_index": parent.index},
+                )
+            )
+    return parents, children

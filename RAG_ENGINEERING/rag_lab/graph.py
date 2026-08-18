@@ -67,23 +67,42 @@ class GraphRAG:
 
     def add(self, chunks: list[Chunk]) -> None:
         for chunk in chunks:
+            print("---------------------------------")
+            print(chunk.text)
+            print(chunk.meta)
             ci = len(self._chunks)
             self._chunks.append(chunk)
+            print("---------------------------------")
+            print(f"Processing chunk {ci}: {chunk.text}")
             for t in self._extract(chunk.text):
+                print("===================================================================")
+                print(f"{t.subject} | {t.relation} | {t.object}")
                 subj, obj = t.subject.lower().strip(), t.object.lower().strip()
+                print("===================================================================")
                 for key, label in ((subj, t.subject), (obj, t.object)):
+                    print("########################################################################")
+                    print(f"Adding node: {key} -> {label.strip()}")
                     self.graph.add_node(key, label=label.strip())
                     self._node_chunks.setdefault(key, set()).add(ci)
+                    print(self._node_chunks)
+                    print("########################################################################")
                 self.graph.add_edge(subj, obj, relation=t.relation.strip())
 
     def _neighborhood(self, query: str, depth: int) -> set[str]:
+        print(f"DEBUG: Finding neighborhood for query '{query}' with depth {depth}")
         q = query.lower()
         nodes = {n for n in self.graph.nodes if self.graph.nodes[n]["label"].lower() in q}
+        print(f"DEBUG: Found initial nodes: {nodes}")
         frontier = set(nodes)
-        for _ in range(depth):
+        print(f"DEBUG: Initial frontier: {frontier}")
+        for i in range(depth):
+            print(f"DEBUG: Expanding at depth {i}")
             nxt: set[str] = set()
             for n in frontier:
-                nxt |= set(self.graph.successors(n)) | set(self.graph.predecessors(n))
+                successors = set(self.graph.successors(n))
+                predecessors = set(self.graph.predecessors(n))
+                print(f"DEBUG: Node {n} has successors: {successors}, predecessors: {predecessors}")
+                nxt |= successors | predecessors
             nodes |= nxt
             frontier = nxt
         return nodes

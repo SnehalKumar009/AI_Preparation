@@ -16,8 +16,12 @@ from rag_lab.vectorstore import Hit
 
 SYSTEM = (
     "You are a helpful assistant. Answer the question using ONLY the context below. "
-    "If the context does not contain the answer, say you don't know. Cite sources "
-    "with their [tag]."
+    "Never use outside or prior knowledge to fill a gap, even if you are confident "
+    "it is correct and even if it is well-known or easily verifiable -- a fact you "
+    "recall but that is not written in the context below counts as unknown. If any "
+    "single fact needed for the answer is missing from the context, say specifically "
+    "which fact is missing and that you don't know, rather than completing the chain "
+    "yourself. Cite every fact you use with its [tag]."
 )
 
 
@@ -29,8 +33,17 @@ class RagResult:
 
 
 def format_context(hits: list[Hit]) -> str:
-    """Join hits into a [source]-tagged block for prompt injection."""
-    return "\n\n---\n\n".join(f"[{h.chunk.source}] {h.chunk.text}" for h in hits)
+    """Join hits into a [source :: heading]-tagged block for prompt injection.
+
+    The heading rides along with the filename so that pronouns and
+    possessives inside an isolated chunk (e.g. "His startup was acquired...")
+    still resolve to the right entity even when the chunk is read without
+    its neighboring chunks.
+    """
+    return "\n\n---\n\n".join(
+        f"[{h.chunk.source} :: {h.chunk.meta.get('heading', '')}] {h.chunk.text}"
+        for h in hits
+    )
 
 
 def rag_answer(

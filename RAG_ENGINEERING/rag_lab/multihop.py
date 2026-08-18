@@ -17,10 +17,33 @@ from rag_lab.pipeline import SYSTEM, format_context
 from rag_lab.vectorstore import Hit
 
 _FOLLOWUP = (
-    "You are researching to answer a QUESTION. Given what you have retrieved so far, "
-    "either output the single next search query that would fill the biggest gap, or "
-    "output DONE if the context is already sufficient. Reply with only the query or "
-    "DONE.\n\nQUESTION: {question}\n\nCONTEXT SO FAR:\n{context}\n\nNext query or DONE:"
+    "You are researching to answer a multi-part QUESTION by chaining facts across "
+    "documents.\n\n"
+    "Step 1: List the specific named facts the QUESTION requires (people, companies, "
+    "dates, etc.).\n"
+    "Step 2: Check CONTEXT SO FAR against that list. Mark each fact FOUND only if its "
+    "exact value is explicitly written in the context -- never mark something FOUND "
+    "because you happen to know it from outside knowledge; that counts as MISSING.\n"
+    "Step 3: If anything is MISSING, decide the ONE search query most likely to "
+    "retrieve it -- name the specific missing entity or relationship, don't just "
+    "repeat the QUESTION verbatim. If every fact has an explicit, concrete value "
+    "written in the context, you're done.\n\n"
+    "{done_rule}\n\n"
+    "QUESTION: {question}\n\n"
+    "QUERIES ALREADY TRIED: {tried}\n\n"
+    "CONTEXT SO FAR:\n{context}\n\n"
+    "Show your Step 1/Step 2 reasoning briefly, then end with exactly one final "
+    "line:\nNEXT: <search query>\nor\nDONE"
+)
+
+_DONE_RULE_NORMAL = (
+    "Do not answer DONE just because the context is long or topically related -- "
+    "only when every required fact has an explicit value."
+)
+_DONE_RULE_MIN_HOPS = (
+    "This is search {hop} of at least {min_hops} required searches for a question "
+    "this complex -- you may NOT answer DONE yet, even if the context looks "
+    "sufficient. Propose the next query."
 )
 
 
@@ -37,21 +60,47 @@ def multihop_answer(
     model: str | None = None,
     k: int = 3,
     max_hops: int = 3,
+    min_hops: int = 2,
     tracker: Any | None = None,
 ) -> tuple[str, HopTrace]:
-    """Iteratively retrieve, letting an LLM steer each next query, then answer."""
+    """Iteratively retrieve, letting an LLM steer each next query, then answer.
+
+    ``min_hops`` is a hard backstop: the loop will not honor a DONE verdict
+    before that many hops have actually run, even if the model claims the
+    context is already sufficient. Small/local models in particular tend to
+    call DONE after a single retrieval pass.
+    """
     llm = get_provider(provider)
     trace = HopTrace()
     query = question
-    for _ in range(max_hops):
+    for hop_index in range(max_hops):
         trace.queries.append(query)
         trace.hits.extend(retriever.search(query, k=k))
+
+        must_continue = hop_index + 1 < min_hops
+        done_rule = (
+            _DONE_RULE_MIN_HOPS.format(hop=hop_index + 1, min_hops=min_hops)
+            if must_continue
+            else _DONE_RULE_NORMAL
+        )
+        context1 = _FOLLOWUP.format(
+                        question=question,
+                        tried=", ".join(trace.queries) or "(none yet)",
+                        context=format_context(trace.hits),
+                        done_rule=done_rule,
+                    )
+        print("----------------------------------------------------")
+        print(context1)
+        print("----------------------------------------------------")
         resp = llm.chat(
             [
                 {
                     "role": "user",
                     "content": _FOLLOWUP.format(
-                        question=question, context=format_context(trace.hits)
+                        question=question,
+                        tried=", ".join(trace.queries) or "(none yet)",
+                        context=format_context(trace.hits),
+                        done_rule=done_rule,
                     ),
                 }
             ],
@@ -60,10 +109,20 @@ def multihop_answer(
         )
         if tracker is not None:
             tracker.add(resp)
-        nxt = resp.text.strip()
-        if not nxt or nxt.upper().startswith("DONE"):
+
+        lines = [line.strip() for line in resp.text.strip().splitlines() if line.strip()]
+        last = lines[-1] if lines else ""
+        if not last:
             break
-        query = nxt.splitlines()[0].strip()
+        if last.upper() == "DONE":
+            if must_continue:
+                # Model ignored the instruction not to stop yet. Don't trust
+                # it -- force another hop off the original question rather
+                # than exiting after a single retrieval pass.
+                query = question
+                continue
+            break
+        query = last[5:].strip() if last.upper().startswith("NEXT:") else last
 
     resp = llm.chat(
         [

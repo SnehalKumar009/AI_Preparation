@@ -30,6 +30,9 @@ def semantic_chunks(
     ``max_sentences``). Lower ``threshold`` => fewer, larger chunks.
     """
     sents = _sentences(text)
+    print("semantic_chunks: text: ", text)
+    for i in range(len(sents)):
+        print(f"semantic_chunks: sents[{i}]: ", repr(sents[i]))
     if not sents:
         return []
     vecs = embed_texts(sents, provider=provider, model=model)

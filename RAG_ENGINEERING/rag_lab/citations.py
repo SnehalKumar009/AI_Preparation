@@ -41,6 +41,9 @@ def cited_answer(
 ) -> CitedAnswer:
     """Generate an answer with inline citations and validate them against sources."""
     context = "\n\n---\n\n".join(f"[{h.chunk.source}] {h.chunk.text}" for h in hits)
+    print("===================================================")
+    print(context)
+    print("===================================================")
     resp = get_provider(provider).chat(
         [
             {"role": "system", "content": _SYSTEM},
@@ -49,6 +52,9 @@ def cited_answer(
         model=model,
         temperature=0.0,
     )
+    print("===================================================")
+    print(resp)
+    print("===================================================")
     if tracker is not None:
         tracker.add(resp)
     sources = {h.chunk.source for h in hits}

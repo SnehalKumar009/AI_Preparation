@@ -22,9 +22,13 @@ _MD_ARTIFACT = re.compile(r"[#>*_`]{1,}")
 
 def clean_text(text: str) -> str:
     """Normalize whitespace so downstream chunking sees consistent input."""
+    # print("After _MD_ARTIFACT.sub\t: ", repr(text))
     text = text.replace("\r\n", "\n").replace("\r", "\n")
+    # print("After replace\t: ", repr(text))
     text = _MULTISPACE.sub(" ", text)
+    # print("After _MULTISPACE.sub\t: ", repr(text))
     text = _MULTINEWLINE.sub("\n\n", text)
+    # print("After _MULTINEWLINE.sub\t: ", repr(text))
     return text.strip()
 
 

@@ -1,0 +1,8 @@
+{
+  // Let Pylance resolve the cross-phase packages that notebooks add to sys.path at runtime.
+  "python.analysis.extraPaths": [
+    "PHASE_1_LLM_FUNDAMENTALS",
+    "PHASE_2_RAG_ENGINEERING",
+    "PHASE_3_AI_AGENTS"
+  ]
+}

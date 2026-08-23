@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from http import client
 import json
 import time
 from typing import Any, Iterator
+from urllib import response
 
-from openai import OpenAI
+from openai import OpenAI, base_url
 
 from study_buddy.config import settings
 from study_buddy.providers.base import ChatResponse, LLMProvider, Message, Usage
@@ -119,3 +121,20 @@ class DeepSeekProvider(OpenAIProvider):
 
     def embed(self, texts: list[str], model: str | None = None) -> list[list[float]]:
         raise NotImplementedError("DeepSeek has no embeddings API; use Ollama or OpenAI")
+
+class OxAlphaProvider(OpenAIProvider):
+    name = "oxalpha"
+    default_model = settings.oxalpha_chat_model
+    default_embed_model = None
+
+    def __init__(self, api_key: str | None = None) -> None:
+        key = api_key or settings.oxalpha_api_key
+        if not key:
+            raise ValueError("OXALPHA_API_KEY is not set in .env")
+        # Skip OpenAIProvider.__init__ key check; wire the OxAlpha base URL.
+        self.client = OpenAI(base_url="https://openrouter.ai/api/v1",
+            api_key=key,
+        )
+
+    def embed(self, texts: list[str], model: str | None = None) -> list[list[float]]:
+        raise NotImplementedError("OxAlpha has no embeddings API; use Ollama or OpenAI")

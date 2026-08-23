@@ -32,6 +32,9 @@ def _situate(document: str, chunk: str, llm: Any, model: str | None, tracker: An
     )
     if tracker is not None:
         tracker.add(resp)
+    # print("======= situating chunk =======")
+    # print(resp)
+    # print("======= situating chunk =======")
     return resp.text.strip()
 
 
@@ -48,6 +51,9 @@ def contextualize_chunks(
     passage while retrieval benefits from the added context.
     """
     llm = get_provider(provider)
+    # print("=====contextualizing chunks=====")
+    # print(document)
+    # print("=====contextualizing chunks=====")
     out: list[Chunk] = []
     for c in chunks:
         prefix = _situate(document, c.text, llm, model, tracker)

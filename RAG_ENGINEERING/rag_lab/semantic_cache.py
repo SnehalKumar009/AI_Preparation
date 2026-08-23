@@ -53,8 +53,14 @@ class SemanticCache:
 
     def put(self, query: str, answer: str) -> None:
         """Store a query/answer pair."""
+        #print("\n======= put start =========\n")
+        #print(f"\nself._embed: {self._embed(query)} =======")
+        
         vec = self._embed(query).reshape(1, -1)
+        #print(f"\nvec: {vec} =======")
         self.entries.append(CacheEntry(query, answer))
+        #print(f"\nself.entries: {self.entries} =======")
+        #print("\n======= put end =========\n")
         self._matrix = vec if self._matrix is None else np.vstack([self._matrix, vec])
 
     def stats(self) -> str:

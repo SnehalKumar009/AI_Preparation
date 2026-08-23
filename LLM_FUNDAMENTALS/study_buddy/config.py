@@ -23,6 +23,7 @@ class Settings:
     gemini_api_key: str | None = field(default_factory=lambda: os.getenv("GEMINI_API_KEY"))
     deepseek_api_key: str | None = field(default_factory=lambda: os.getenv("DEEPSEEK_API_KEY"))
     anthropic_api_key: str | None = field(default_factory=lambda: os.getenv("ANTHROPIC_API_KEY"))
+    oxalpha_api_key: str | None = field(default_factory=lambda: os.getenv("OXALPHA_API_KEY"))
 
     # Default models per role (see plan)
     ollama_chat_model: str = "qwen3-coder:30b"
@@ -33,6 +34,7 @@ class Settings:
     deepseek_chat_model: str = "deepseek-chat"
     deepseek_reasoner_model: str = "deepseek-reasoner"
     anthropic_chat_model: str = "claude-haiku-4-5-20251001"
+    oxalpha_chat_model: str = "stealth/ox-alpha"
 
     # Filesystem
     notes_dir: Path = PROJECT_ROOT / "notes"

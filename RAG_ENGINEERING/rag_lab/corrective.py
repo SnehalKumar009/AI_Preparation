@@ -41,6 +41,10 @@ def _grade(llm: Any, question: str, doc: str, model: str | None, tracker: Any | 
         model=model,
         temperature=0.0,
     )
+    print("\n===========_grade=====================\n")
+    print(f"QUESTION: {question}\n\nDOCUMENT: {doc}\n\nGRADE: {resp.text}")
+    print(f"Response: {resp.text}")
+    print("\n===========_grade=====================\n")
     if tracker is not None:
         tracker.add(resp)
     return resp.text.strip().upper().startswith("Y")
@@ -62,6 +66,7 @@ def corrective_answer(
     query = question
 
     for attempt in range(max_rewrites + 1):
+        print(f"\n\n================= Attempt {attempt + 1} =================\n\n")
         trace.queries.append(query)
         hits = retriever.search(query, k=k)
         relevant = [h for h in hits if _grade(llm, question, h.chunk.text, model, tracker)]
@@ -69,11 +74,14 @@ def corrective_answer(
             trace.kept = relevant or hits
             break
         # Not enough good evidence — rewrite the query and try once more.
+        print(f"\n\n================= Rewriting Query =================\n\n")
+        print(f"Original query: {query}")
         resp = llm.chat(
             [{"role": "user", "content": _REWRITE.format(question=question)}],
             model=model,
             temperature=0.3,
         )
+        print(f"Rewritten query: {resp.text}")
         if tracker is not None:
             tracker.add(resp)
         query = resp.text.strip().splitlines()[0]

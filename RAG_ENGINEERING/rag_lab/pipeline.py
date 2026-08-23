@@ -57,7 +57,15 @@ def rag_answer(
 ) -> RagResult:
     """Retrieve context (unless one is supplied) and answer the query with it."""
     hits = retriever.search(query, k=k)
+    # print("==========HITS START==========")
+    # for hit in hits:
+    #     print("hit.chunk.source:", hit.chunk.source)
+    #     print("hit.chunk.text:", hit.chunk.text)
+    # print("==========HITS END==========")
     ctx = context if context is not None else format_context(hits)
+    # print("==========CONTEXT START==========")
+    # print("ctx:", ctx)
+    # print("==========CONTEXT END==========")
     resp = get_provider(provider).chat(
         [
             {"role": "system", "content": SYSTEM},
@@ -66,6 +74,8 @@ def rag_answer(
         model=model,
         temperature=0.0,
     )
+    # print("==========RESPONSE START==========")
+    # print("resp.text:", resp.text)
     if tracker is not None:
         tracker.add(resp)
     return RagResult(answer=resp.text, hits=hits, context=ctx)

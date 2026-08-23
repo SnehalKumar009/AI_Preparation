@@ -27,10 +27,16 @@ class SentenceWindowRetriever:
         """Explode each chunk into per-sentence chunks tagged with their position."""
         sent_chunks: list[Chunk] = []
         for c in chunks:
+            print("================================")
+            print("Adding chunk:", c.text)
             for s in _sentences(c.text):
                 pos = len(self._sentences)
                 self._sentences.append(s)
                 sent_chunks.append(Chunk(s, source=c.source, index=pos, meta={"pos": pos}))
+                print("    Sentence so far:")
+                for i, sent in enumerate(self._sentences):
+                    print(f"        {i}: {sent}")
+            print("================================")
         self._store.add(sent_chunks)
 
     def _window_text(self, pos: int) -> str:
@@ -41,9 +47,15 @@ class SentenceWindowRetriever:
     def search(self, query: str, k: int = 4, where: Callable[[Chunk], bool] | None = None) -> list[Hit]:
         """Retrieve on single sentences, then widen each hit to its window."""
         hits = self._store.search(query, k=k, where=where)
+        print("=========search start===========")
+        for h in hits:
+            print(f"Hit: {h.chunk.text} (score: {h.score})")
+        print("=========search end===========")
+        print("=========widening start===========")
         widened: list[Hit] = []
         for h in hits:
             pos = int(h.chunk.meta.get("pos", h.chunk.index))
+            print(f"index : {h.chunk.index}")
             widened.append(
                 Hit(
                     Chunk(self._window_text(pos), source=h.chunk.source, index=pos,
@@ -51,6 +63,8 @@ class SentenceWindowRetriever:
                     h.score,
                 )
             )
+            print(f"Widened hit: {widened[-1].chunk.text}")
+        print("=========widening end===========")
         return widened
 
     def __len__(self) -> int:

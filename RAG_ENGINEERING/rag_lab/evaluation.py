@@ -66,7 +66,14 @@ class Judge:
         return resp.text.strip()
 
     def _yes(self, question: str, statement: str, context: str) -> bool:
+        print("==========JUDGE YES/NO START==========")
+        print("question:", question)
+        print("statement:", statement)
+        print("context:", context)
+        
         out = self._ask(_YESNO.format(question=question, statement=statement, context=context))
+        print("out:", out)
+        print("==========JUDGE YES/NO END==========")
         return out.upper().lstrip().startswith("Y")
 
     def _score01(self, prompt: str) -> float:
@@ -79,33 +86,37 @@ def context_precision(judge: Judge, question: str, hits: list[Hit]) -> float:
     if not hits:
         return 0.0
     q = "Is this CONTEXT relevant to answering the QUESTION below?\nQUESTION: " + question
+    print("==========CONTEXT PRECISION START==========")
     relevant = sum(judge._yes(q, "", h.chunk.text) for h in hits)
+    print("==========CONTEXT PRECISION END==========")
     return relevant / len(hits)
 
 
 def context_recall(judge: Judge, ground_truth: str, hits: list[Hit]) -> float:
     """Share of ground-truth sentences supported by the retrieved context."""
     from rag_lab.chunking import _sentences
-
+    print("==========CONTEXT RECALL START==========")
     sents = _sentences(ground_truth)
     if not sents:
         return 0.0
     context = "\n\n".join(h.chunk.text for h in hits)
     q = "Is the STATEMENT supported by the CONTEXT?"
     supported = sum(judge._yes(q, s, context) for s in sents)
+    print("==========CONTEXT RECALL END==========")
     return supported / len(sents)
 
 
 def faithfulness(judge: Judge, answer: str, hits: list[Hit]) -> float:
     """Share of the answer's sentences entailed by the retrieved context."""
     from rag_lab.chunking import _sentences
-
+    print("==========FAITHFULNESS START==========")
     sents = _sentences(answer)
     if not sents:
         return 0.0
     context = "\n\n".join(h.chunk.text for h in hits)
     q = "Is the STATEMENT fully supported by the CONTEXT (no invented facts)?"
     grounded = sum(judge._yes(q, s, context) for s in sents)
+    print("==========FAITHFULNESS END==========")
     return grounded / len(sents)
 
 
@@ -124,6 +135,15 @@ def evaluate(
     tracker: Any | None = None,
 ) -> EvalResult:
     """Run the full metric suite for one (question, answer, context) example."""
+    print("==========EVALUATION START==========")
+    print("question:", question)
+    print("answer:", answer)
+    print("ground_truth:", ground_truth)
+    print("hits:")
+    for hit in hits:
+        print("hit.chunk.source:", hit.chunk.source)
+        print("hit.chunk.text:", hit.chunk.text)
+    print("==========EVALUATION END==========")
     judge = Judge(provider=provider, model=model, tracker=tracker)
     return EvalResult(
         context_precision=context_precision(judge, question, hits),

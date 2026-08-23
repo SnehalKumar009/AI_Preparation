@@ -37,9 +37,12 @@ class IVFIndex:
 
     def _kmeans(self, x: np.ndarray) -> np.ndarray:
         idx = self.rng.choice(len(x), size=min(self.nlist, len(x)), replace=False)
+        print("K-means centroids idx:", idx)
         centroids = x[idx].copy()
+        print("K-means centroids:", centroids)
         for _ in range(self.iters):
             assign = np.argmax(x @ centroids.T, axis=1)
+            print("K-means assignment:", assign)
             for c in range(len(centroids)):
                 members = x[assign == c]
                 if len(members):

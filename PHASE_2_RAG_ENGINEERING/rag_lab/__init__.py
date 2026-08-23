@@ -2,8 +2,9 @@
 
 It reuses the Phase 1 ``study_buddy`` package for providers (chat + embeddings)
 and cost tracking, and adds retrieval machinery on top. Importing ``rag_lab``
-locates the sibling ``LLM_FUNDAMENTALS/study_buddy`` and puts it on ``sys.path``
-automatically, so notebooks only need to add ``RAG_ENGINEERING`` to the path.
+locates the sibling folder that holds ``study_buddy`` and puts it on ``sys.path``
+automatically (by content, not folder name), so notebooks only need to add this
+package's own root to the path.
 """
 
 from __future__ import annotations
@@ -12,20 +13,24 @@ import sys as _sys
 from pathlib import Path as _Path
 
 # ---- Locate and expose the Phase 1 study_buddy package --------------------
-_PKG_DIR = _Path(__file__).resolve().parent          # .../RAG_ENGINEERING/rag_lab
-_PHASE2_ROOT = _PKG_DIR.parent                        # .../RAG_ENGINEERING
+_PKG_DIR = _Path(__file__).resolve().parent          # .../<phase2>/rag_lab
+_PHASE2_ROOT = _PKG_DIR.parent                        # .../<phase2>
 
 
 def _bootstrap_study_buddy() -> _Path:
-    """Add sibling LLM_FUNDAMENTALS (which holds study_buddy) to sys.path."""
-    for candidate in [_PHASE2_ROOT.parent, *_PHASE2_ROOT.parents]:
-        phase1 = candidate / "LLM_FUNDAMENTALS"
-        if (phase1 / "study_buddy").exists():
-            if str(phase1) not in _sys.path:
-                _sys.path.insert(0, str(phase1))
-            return phase1
+    """Add the sibling folder that holds study_buddy to sys.path (name-agnostic)."""
+    for base in [_PHASE2_ROOT.parent, *_PHASE2_ROOT.parents]:
+        try:
+            siblings = [s for s in base.iterdir() if s.is_dir()]
+        except (PermissionError, OSError):
+            continue
+        for sibling in siblings:
+            if (sibling / "study_buddy").exists():
+                if str(sibling) not in _sys.path:
+                    _sys.path.insert(0, str(sibling))
+                return sibling
     raise ImportError(
-        "Could not locate LLM_FUNDAMENTALS/study_buddy next to RAG_ENGINEERING."
+        "Could not locate a sibling folder containing study_buddy."
     )
 
 

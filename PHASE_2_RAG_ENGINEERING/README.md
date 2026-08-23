@@ -17,21 +17,21 @@ each SDK, not just one.
 .\.venv\Scripts\Activate.ps1
 
 # install the Phase 2 superset (also covers Phase 1 deps)
-pip install -r RAG_ENGINEERING\requirements.txt
+pip install -r PHASE_2_RAG_ENGINEERING\requirements.txt
 
 # local models (optional but recommended — every notebook can fall back to Ollama)
 ollama pull nomic-embed-text
 ollama pull qwen3-coder:30b
 ```
 
-Cloud keys live in `LLM_FUNDAMENTALS/.env` (reused). Missing keys skip cleanly.
+Cloud keys live in `PHASE_1_LLM_FUNDAMENTALS/.env` (reused). Missing keys skip cleanly.
 
 ## How to run
 
 Open one notebook at a time and run top-to-bottom:
 
 ```powershell
-jupyter lab RAG_ENGINEERING\notebooks
+jupyter lab PHASE_2_RAG_ENGINEERING\notebooks
 ```
 
 ## Curriculum
@@ -75,7 +75,7 @@ harness and a live USD cost meter.
 ## Layout
 
 ```
-RAG_ENGINEERING/
+PHASE_2_RAG_ENGINEERING/
   rag_lab/         # Phase 2 core (reuses study_buddy providers)
   notebooks/       # 01..29 + capstone
   notes/           # RAG corpus (multi-section markdown)

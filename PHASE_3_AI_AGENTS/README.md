@@ -22,21 +22,21 @@ frameworks and orchestration are **Phase 5**.
 .\.venv\Scripts\Activate.ps1
 
 # install the Phase 3 superset (also covers Phase 1 & 2 deps)
-pip install -r AI_AGENTS\requirements.txt
+pip install -r PHASE_3_AI_AGENTS\requirements.txt
 
 # local models (optional but recommended — every notebook can fall back to Ollama)
 ollama pull nomic-embed-text
 ollama pull qwen3-coder:30b
 ```
 
-Cloud keys live in `LLM_FUNDAMENTALS/.env` (reused). Missing keys skip cleanly.
+Cloud keys live in `PHASE_1_LLM_FUNDAMENTALS/.env` (reused). Missing keys skip cleanly.
 
 ## How to run
 
 Open one notebook at a time and run top-to-bottom:
 
 ```powershell
-jupyter lab AI_AGENTS\notebooks
+jupyter lab PHASE_3_AI_AGENTS\notebooks
 ```
 
 ## Curriculum
@@ -79,7 +79,7 @@ with a live USD cost meter.
 ## Layout
 
 ```
-AI_AGENTS/
+PHASE_3_AI_AGENTS/
   agents_lab/      # Phase 3 core (reuses study_buddy + rag_lab)
   notebooks/       # 01..19 + capstone
   requirements.txt # superset of Phases 1 & 2

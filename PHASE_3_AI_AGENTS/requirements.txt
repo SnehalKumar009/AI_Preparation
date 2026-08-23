@@ -1,5 +1,5 @@
 # Phase 3 — AI Agents. Superset of Phases 1 & 2 so one .venv runs all three.
-# Install:  pip install -r AI_AGENTS/requirements.txt
+# Install:  pip install -r PHASE_3_AI_AGENTS/requirements.txt
 
 # ---- Providers (reused from Phase 1 study_buddy) ----
 ollama>=0.3.0

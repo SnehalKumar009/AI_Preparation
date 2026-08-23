@@ -4,9 +4,10 @@ Reuses Phase 1 ``study_buddy`` (providers + cost tracking) and Phase 2
 ``rag_lab`` (retrieval), and adds agent machinery: the agent loop, a tool
 registry, ReAct, planning, reflection/Reflexion, self-correction, loop control,
 short-term memory, safety, agentic RAG, light multi-agent patterns, tracing, and
-a framework bridge. Importing ``agents_lab`` locates the sibling
-``LLM_FUNDAMENTALS`` and ``RAG_ENGINEERING`` folders and puts them on
-``sys.path`` automatically, so notebooks only need to add ``AI_AGENTS``.
+a framework bridge. Importing ``agents_lab`` locates the sibling folders that
+hold ``study_buddy`` and ``rag_lab`` and puts them on ``sys.path`` automatically
+(by content, not folder name), so notebooks only need to add this package's own
+root to the path.
 """
 
 from __future__ import annotations
@@ -14,28 +15,32 @@ from __future__ import annotations
 import sys as _sys
 from pathlib import Path as _Path
 
-_PKG_DIR = _Path(__file__).resolve().parent      # .../AI_AGENTS/agents_lab
-_PHASE3_ROOT = _PKG_DIR.parent                    # .../AI_AGENTS
+_PKG_DIR = _Path(__file__).resolve().parent      # .../<phase3>/agents_lab
+_PHASE3_ROOT = _PKG_DIR.parent                    # .../<phase3>
 
 
 def _bootstrap_siblings() -> None:
-    """Add sibling LLM_FUNDAMENTALS (study_buddy) and RAG_ENGINEERING (rag_lab)."""
+    """Add sibling folders holding study_buddy and rag_lab to sys.path (name-agnostic)."""
+    found1 = found2 = False
     for base in [_PHASE3_ROOT.parent, *_PHASE3_ROOT.parents]:
-        phase1 = base / "LLM_FUNDAMENTALS"
-        phase2 = base / "RAG_ENGINEERING"
-        found1 = (phase1 / "study_buddy").exists()
-        found2 = (phase2 / "rag_lab").exists()
-        if found1 or found2:
-            if found1 and str(phase1) not in _sys.path:
-                _sys.path.insert(0, str(phase1))
-            if found2 and str(phase2) not in _sys.path:
-                _sys.path.insert(0, str(phase2))
-            if found1 and found2:
-                return
-    if not any((base / "LLM_FUNDAMENTALS" / "study_buddy").exists()
-               for base in [_PHASE3_ROOT.parent, *_PHASE3_ROOT.parents]):
+        try:
+            siblings = [s for s in base.iterdir() if s.is_dir()]
+        except (PermissionError, OSError):
+            continue
+        for sibling in siblings:
+            if not found1 and (sibling / "study_buddy").exists():
+                if str(sibling) not in _sys.path:
+                    _sys.path.insert(0, str(sibling))
+                found1 = True
+            if not found2 and (sibling / "rag_lab").exists():
+                if str(sibling) not in _sys.path:
+                    _sys.path.insert(0, str(sibling))
+                found2 = True
+        if found1 and found2:
+            return
+    if not found1:
         raise ImportError(
-            "Could not locate LLM_FUNDAMENTALS/study_buddy near AI_AGENTS."
+            "Could not locate a sibling folder containing study_buddy."
         )
 
 

@@ -1,5 +1,5 @@
 # Phase 2 — RAG Engineering. Superset of Phase 1 so one .venv runs both.
-# Install:  pip install -r RAG_ENGINEERING/requirements.txt
+# Install:  pip install -r PHASE_2_RAG_ENGINEERING/requirements.txt
 
 # ---- Providers (reused from Phase 1 study_buddy) ----
 ollama>=0.3.0

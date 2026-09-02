@@ -60,7 +60,7 @@ from agents_lab.control import Budget, Guard, BudgetExceeded, RunawayLoop
 from agents_lab.memory import Scratchpad, ShortTermMemory
 from agents_lab.safety import check_tool_input, guard_observation, SafetyReport
 from agents_lab.agentic_rag import make_rag_tool, build_rag_agent
-from agents_lab.multiagent import Worker, Supervisor, debate
+from agents_lab.multiagent import Worker, Supervisor, debate, Pipeline, PipelineResult, GroupChat
 from agents_lab import frameworks
 
 __all__ = [
@@ -101,5 +101,8 @@ __all__ = [
     "Worker",
     "Supervisor",
     "debate",
+    "Pipeline",
+    "PipelineResult",
+    "GroupChat",
     "frameworks",
 ]

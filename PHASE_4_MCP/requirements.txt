@@ -1,0 +1,30 @@
+# Phase 4 — Local MCP. Superset of Phases 1–3 so one .venv runs all four.
+# Install:  pip install -r PHASE_4_MCP/requirements.txt
+
+# ---- Providers (reused from Phase 1 study_buddy) ----
+ollama>=0.3.0
+openai>=1.40.0            # also used for DeepSeek + oxalpha (OpenAI-compatible)
+google-genai>=0.3.0
+anthropic>=0.34.0
+
+# ---- Config & core ----
+python-dotenv>=1.0.0
+PyYAML>=6.0
+numpy>=1.26.0
+tiktoken>=0.7.0
+
+# ---- Phase 2 retrieval (reused by the code-search server, notebook 22) ----
+chromadb>=0.5.0
+rank-bm25>=0.2.2
+networkx>=3.2
+pypdf>=4.2.0
+hnswlib>=0.8.0
+
+# ---- Phase 4 MCP ----
+mcp>=1.2.0               # official Model Context Protocol SDK (notebooks 08–12)
+GitPython>=3.1.40        # git server (notebook 14); sqlite is stdlib
+
+# ---- Notebooks + capstone ----
+jupyter>=1.0.0
+ipykernel>=6.29.0
+streamlit>=1.36.0

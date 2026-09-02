@@ -41,7 +41,7 @@ jupyter lab PHASE_3_AI_AGENTS\notebooks
 
 ## Curriculum
 
-Work through `notebooks/01_*.ipynb` → `19_*.ipynb`, then `capstone.ipynb`.
+Work through `notebooks/01_*.ipynb` → `23_*.ipynb`, then `capstone.ipynb`.
 
 ### Foundations
 | # | Topic | # | Topic |
@@ -72,6 +72,12 @@ Work through `notebooks/01_*.ipynb` → `19_*.ipynb`, then `capstone.ipynb`.
 |---|-------|---|-------|
 | 16 | Supervisor + Workers | 18 | Tracing an Agent |
 | 17 | Handoffs & Debate | 19 | Framework Bridge (OpenAI SDK / LangGraph) |
+
+### Coordination, streaming & control
+| # | Topic | # | Topic |
+|---|-------|---|-------|
+| 20 | Sequential Pipeline (Planner→…→Tester) | 22 | Streaming an Agent (events + tokens) |
+| 21 | Group Chat (round-robin) | 23 | Human-in-the-Loop Approval |
 
 **Capstone:** a from-scratch research agent — tools + agentic RAG + reflection,
 with a live USD cost meter.

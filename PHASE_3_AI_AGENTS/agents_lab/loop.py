@@ -13,7 +13,7 @@ trajectory is captured in a :class:`~agents_lab.tracing.Tracer`.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Callable
 
 from study_buddy import CostTracker, get_provider
 
@@ -50,6 +50,8 @@ class Agent:
         max_steps: int = 6,
         temperature: float = 0.0,
         tracker: CostTracker | None = None,
+        approve_tool: Callable[[str, dict[str, Any]], bool] | None = None,
+        on_step: Callable[[Step], None] | None = None,
     ) -> None:
         self.llm = get_provider(provider)
         self.model = model
@@ -58,6 +60,15 @@ class Agent:
         self.max_steps = max_steps
         self.temperature = temperature
         self.tracker = tracker if tracker is not None else CostTracker()
+        # Called before each tool runs; return False to veto it (notebook 23).
+        self.approve_tool = approve_tool
+        # Called as each Step is recorded, for live streaming (notebook 22).
+        self.on_step = on_step
+
+    def _emit(self, step: Step) -> Step:
+        if self.on_step is not None:
+            self.on_step(step)
+        return step
 
     def run(self, task: str, tracer: Tracer | None = None) -> AgentResult:
         tracer = tracer or Tracer()
@@ -76,18 +87,21 @@ class Agent:
             self.tracker.add(resp)
 
             if not resp.tool_calls:
-                tracer.answer(resp.text)
+                self._emit(tracer.answer(resp.text))
                 return AgentResult(resp.text, tracer.steps, self.tracker)
 
             if resp.text:
-                tracer.thought(resp.text)
+                self._emit(tracer.thought(resp.text))
             # Execute every requested call and feed results back as one message.
             observations = []
             for call in resp.tool_calls:
                 name, args = call["name"], call.get("arguments", {})
-                tracer.action(name, args)
-                result = self.tools.dispatch(name, args)
-                tracer.observation(result, tool=name)
+                self._emit(tracer.action(name, args))
+                if self.approve_tool is not None and not self.approve_tool(name, args):
+                    result = f"Denied: a human reviewer rejected the call {name}({args})."
+                else:
+                    result = self.tools.dispatch(name, args)
+                self._emit(tracer.observation(result, tool=name))
                 observations.append(f"Tool `{name}` returned: {result}")
 
             messages.append({"role": "assistant", "content": resp.text or "(calling tools)"})
@@ -102,5 +116,5 @@ class Agent:
             temperature=self.temperature,
         )
         self.tracker.add(final)
-        tracer.answer(final.text)
+        self._emit(tracer.answer(final.text))
         return AgentResult(final.text, tracer.steps, self.tracker)

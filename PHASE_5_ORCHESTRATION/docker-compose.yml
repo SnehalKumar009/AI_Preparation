@@ -1,0 +1,27 @@
+# Phase 5 infrastructure only — Python stays in the per-framework environments
+# built by setup.sh. Docker runs the *services* the notebooks talk to.
+#
+#   docker compose up -d temporal     # before notebooks 44–45
+#   docker compose down               # stop (history is kept in the volume)
+#
+# No Docker? The same dev server runs from the Temporal CLI:
+#   temporal server start-dev --db-filename checkpoints/temporal.db
+
+services:
+  # Temporal dev server: gRPC on :7233 (what the Python SDK connects to),
+  # web UI on http://localhost:8233 (watch workflow histories live).
+  temporal:
+    image: temporalio/temporal:latest
+    command: ["server", "start-dev", "--ip", "0.0.0.0", "--db-filename", "/home/temporal/temporal.db"]
+    ports:
+      - "7233:7233"
+      - "8233:8233"
+    volumes:
+      # Persist workflow history so a "crash and resume" demo survives
+      # restarting the container too. The image runs as the non-root user
+      # "temporal", so the volume goes on its home directory (which it owns).
+      - temporal-data:/home/temporal
+    restart: unless-stopped
+
+volumes:
+  temporal-data: {}

@@ -1,0 +1,7 @@
+# Env "core" -> kernel "Phase 5 · core"
+# Part A (orchestration from scratch), Part G (Temporal), Part H patterns.
+# orch_lab itself is pure Python + sqlite3 (stdlib); nothing extra is needed for Part A.
+-r base.txt
+
+temporalio>=1.7.0        # Part G: durable execution (notebooks 44–45)
+a2a-sdk[http-server]>=0.3.0   # Part H: agent-to-agent protocol (notebook 46)

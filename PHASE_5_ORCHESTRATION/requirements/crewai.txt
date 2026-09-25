@@ -1,0 +1,6 @@
+# Env "crewai" -> kernel "Phase 5 · crewai"
+# Part D (CrewAI: agents, tasks, crews, Flows).
+-r base.txt
+
+crewai>=1.0.0
+crewai-tools[mcp]>=0.60.0

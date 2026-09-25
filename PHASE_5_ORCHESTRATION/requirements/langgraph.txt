@@ -1,0 +1,12 @@
+# Env "langgraph" -> kernel "Phase 5 · langgraph"
+# Part B (LangGraph in depth) + the capstone.
+-r base.txt
+
+langgraph>=1.0.0
+langgraph-checkpoint-sqlite>=2.0.0   # durable checkpoints on disk
+langchain-core>=1.0.0
+langchain-mcp-adapters>=0.1.0        # load Phase 4 MCP servers as LangGraph tools
+langchain-ollama>=0.3.0
+langchain-openai>=0.3.0
+langchain-anthropic>=0.3.0
+a2a-sdk[http-server]>=0.3.0          # capstone exposes an agent over A2A

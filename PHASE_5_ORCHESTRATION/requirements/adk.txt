@@ -1,6 +1,0 @@
-# Env "adk" -> kernel "Phase 5 · adk"
-# Part F (Google Agent Development Kit). LiteLLM lets ADK agents run on Ollama.
--r base.txt
-
-google-adk>=1.0.0
-litellm>=1.60.0

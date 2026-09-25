@@ -1,5 +1,0 @@
-# Env "openai_agents" -> kernel "Phase 5 · openai_agents"
-# Part C (OpenAI Agents SDK). Works with Ollama through its OpenAI-compatible /v1 API.
--r base.txt
-
-openai-agents>=0.2.0

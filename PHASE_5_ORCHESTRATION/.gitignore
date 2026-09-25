@@ -1,8 +1,0 @@
-.venvs/
-__pycache__/
-*.py[cod]
-.ipynb_checkpoints/
-# checkpoint databases written by the notebooks
-checkpoints/
-*.sqlite
-*.sqlite-*

@@ -1,3 +1,0 @@
-# Shared by every Phase 5 environment: everything Phases 1–4 need, so
-# study_buddy, rag_lab, agents_lab and mcp_lab import in every kernel.
--r ../../PHASE_4_MCP/requirements.txt

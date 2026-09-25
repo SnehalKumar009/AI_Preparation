@@ -1,0 +1,5 @@
+# 00_CONCEPTS — plain Python, no orchestration framework.
+# The ideas are built by hand here; the Ollama client is only for the live demos.
+ollama>=0.5.0
+jupyter>=1.1.0
+ipykernel>=6.29.0

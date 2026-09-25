@@ -1,5 +1,0 @@
-# Env "msaf" -> kernel "Phase 5 · msaf"
-# Part E (Microsoft Agent Framework — successor to AutoGen + Semantic Kernel).
--r base.txt
-
-agent-framework>=1.0.0

@@ -1,0 +1,22 @@
+# 01_LANGGRAPH — everything this section needs, and nothing from other sections.
+
+# LangGraph itself + durable checkpoints on disk
+langgraph>=1.0.0
+langgraph-checkpoint-sqlite>=2.0.0
+
+# Chat models (LangGraph talks to models through LangChain's chat-model interface)
+langchain-core>=1.0.0
+langchain>=1.0.0              # init_chat_model, create_agent
+langchain-ollama>=0.3.0       # local models (default)
+langchain-openai>=0.3.0       # optional: OPENAI_API_KEY
+langchain-anthropic>=0.3.0    # optional: ANTHROPIC_API_KEY
+
+# MCP: our own small server + the adapter that turns MCP tools into LangGraph tools
+mcp>=1.10.0,<2      # langchain-mcp-adapters 0.3 does not work with mcp 2.x yet
+langchain-mcp-adapters>=0.1.0
+
+# Notebooks
+python-dotenv>=1.0.0
+grandalf>=0.8           # draw graphs as text: graph.get_graph().draw_ascii()
+jupyter>=1.1.0
+ipykernel>=6.29.0

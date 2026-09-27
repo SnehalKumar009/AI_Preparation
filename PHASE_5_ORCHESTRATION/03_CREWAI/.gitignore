@@ -1,0 +1,11 @@
+.venv/
+.env
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+# databases the notebooks create while running
+checkpoints/
+*.db
+*.db-*
+*.sqlite
+data/reports/

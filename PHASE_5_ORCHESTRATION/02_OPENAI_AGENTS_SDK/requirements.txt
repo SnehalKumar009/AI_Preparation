@@ -1,0 +1,13 @@
+# 02_OPENAI_AGENTS_SDK — everything this section needs, and nothing from other sections.
+
+# The OpenAI Agents SDK (package "openai-agents", imported as "agents").
+# It talks to any OpenAI-compatible endpoint, including local Ollama.
+openai-agents>=0.2.0
+
+# MCP: the SDK has a built-in MCP client; this is for our own small server
+mcp>=1.10.0,<2
+
+# Notebooks
+python-dotenv>=1.0.0
+jupyter>=1.1.0
+ipykernel>=6.29.0

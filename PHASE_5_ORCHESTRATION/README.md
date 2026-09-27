@@ -15,8 +15,8 @@ section per framework**.
 |---|---|---|
 | `00_CONCEPTS/` | The ideas in plain Python: why orchestration, a hand-built engine, workflows vs agents | ✅ ready |
 | `01_LANGGRAPH/` | LangGraph: 12 notebooks + project | ✅ ready |
-| `02_OPENAI_AGENTS_SDK/` | OpenAI Agents SDK | planned |
-| `03_CREWAI/` | CrewAI | planned |
+| `02_OPENAI_AGENTS_SDK/` | OpenAI Agents SDK: 12 notebooks + project | ✅ ready |
+| `03_CREWAI/` | CrewAI: 12 notebooks + project | ✅ ready |
 | `04_MICROSOFT_AGENT_FRAMEWORK/` | Microsoft Agent Framework (successor to AutoGen and Semantic Kernel) | planned |
 | `05_GOOGLE_ADK/` | Google Agent Development Kit | planned |
 | `06_TEMPORAL/` | Durable execution with Temporal | planned |

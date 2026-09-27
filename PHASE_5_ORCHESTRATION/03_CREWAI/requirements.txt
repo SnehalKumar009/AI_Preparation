@@ -1,0 +1,17 @@
+# 03_CREWAI — everything this section needs, and nothing from other sections.
+
+# CrewAI (agents, tasks, crews, Flows) and its tool library.
+# The [mcp] extra lets crews use tools served by MCP servers.
+crewai>=1.0.0
+crewai-tools[mcp]>=0.60.0
+
+# Our own small MCP server
+mcp>=1.10.0,<2
+
+# Local embeddings for crew memory (notebook 09): CrewAI calls Ollama through this package
+ollama>=0.5.0
+
+# Notebooks
+python-dotenv>=1.0.0
+jupyter>=1.1.0
+ipykernel>=6.29.0
